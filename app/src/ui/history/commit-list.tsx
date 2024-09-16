@@ -26,6 +26,18 @@ import {
   PopoverScreenBorderPadding,
 } from '../lib/popover'
 import { KeyboardShortcut } from '../keyboard-shortcut/keyboard-shortcut'
+import { Account } from '../../models/account'
+import { RowIndexPath } from '../lib/list/list-row-index-path'
+import { assertNever } from '../../lib/fatal-error'
+import { CommitDragElement } from '../drag-elements/commit-drag-element'
+import { AriaLiveContainer } from '../accessibility/aria-live-container'
+import { debounce } from 'lodash'
+import {
+  Popover,
+  PopoverAnchorPosition,
+  PopoverScreenBorderPadding,
+} from '../lib/popover'
+import { KeyboardShortcut } from '../keyboard-shortcut/keyboard-shortcut'
 
 const RowHeight = 50
 
@@ -174,6 +186,8 @@ interface ICommitListProps {
 
   /** Shas that should be highlighted */
   readonly shasToHighlight?: ReadonlyArray<string>
+
+  readonly accounts: ReadonlyArray<Account>
 }
 
 interface ICommitListState {
@@ -299,9 +313,7 @@ export class CommitList extends React.Component<
         onRenderCommitDragElement={this.onRenderCommitDragElement}
         onRemoveDragElement={this.props.onRemoveCommitDragElement}
         disableSquashing={this.props.disableSquashing}
-        isMultiCommitOperationInProgress={
-          this.props.isMultiCommitOperationInProgress
-        }
+        accounts={this.props.accounts}
       />
     )
   }
@@ -586,6 +598,7 @@ export class CommitList extends React.Component<
             selectedCommits={commits}
             isKeyboardInsertion={true}
             emoji={emoji}
+            accounts={this.props.accounts}
           />
         )
       default:

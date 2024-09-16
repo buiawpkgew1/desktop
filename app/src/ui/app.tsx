@@ -1195,7 +1195,6 @@ export class App extends React.Component<IAppProps, IAppState> {
               this.props.dispatcher.showFoldout({
                 type: FoldoutType.AppMenu,
                 enableAccessKeyNavigation: true,
-                openedWithAccessKey: true,
               })
             } else {
               this.props.dispatcher.executeMenuItem(menuItemForAccessKey)
@@ -1237,7 +1236,6 @@ export class App extends React.Component<IAppProps, IAppState> {
             this.props.dispatcher.showFoldout({
               type: FoldoutType.AppMenu,
               enableAccessKeyNavigation: true,
-              openedWithAccessKey: false,
             })
           }
         }
@@ -1870,7 +1868,7 @@ export class App extends React.Component<IAppProps, IAppState> {
             key="editor-error"
             message={popup.message}
             onDismissed={onPopupDismissedFn}
-            showPreferencesDialog={this.onShowAdvancedPreferences}
+            showPreferencesDialog={this.onShowIntegrationsPreferences}
             viewPreferences={openPreferences}
             suggestDefaultEditor={suggestDefaultEditor}
           />
@@ -1881,7 +1879,7 @@ export class App extends React.Component<IAppProps, IAppState> {
             key="shell-error"
             message={popup.message}
             onDismissed={onPopupDismissedFn}
-            showPreferencesDialog={this.onShowAdvancedPreferences}
+            showPreferencesDialog={this.onShowIntegrationsPreferences}
           />
         )
       case PopupType.InitializeLFS:
@@ -2226,6 +2224,7 @@ export class App extends React.Component<IAppProps, IAppState> {
             onDismissed={onPopupDismissedFn}
             onSubmitCommitMessage={popup.onSubmitCommitMessage}
             repositoryAccount={repositoryAccount}
+            accounts={this.state.accounts}
           />
         )
       case PopupType.MultiCommitOperation: {
@@ -2344,8 +2343,6 @@ export class App extends React.Component<IAppProps, IAppState> {
             shouldChangeRepository={popup.shouldChangeRepository}
             repository={popup.repository}
             pullRequest={popup.pullRequest}
-            commitMessage={popup.commitMessage}
-            commitSha={popup.commitSha}
             checks={popup.checks}
             accounts={this.state.accounts}
             onSubmit={onPopupDismissedFn}
@@ -2406,9 +2403,9 @@ export class App extends React.Component<IAppProps, IAppState> {
             pullRequest={popup.pullRequest}
             review={popup.review}
             emoji={this.state.emoji}
-            accounts={this.state.accounts}
             onSubmit={onPopupDismissedFn}
             onDismissed={onPopupDismissedFn}
+            accounts={this.state.accounts}
           />
         )
       }
@@ -2434,6 +2431,7 @@ export class App extends React.Component<IAppProps, IAppState> {
             selectedTab={popup.selectedTab}
             emoji={emoji}
             onDismissed={onPopupDismissedFn}
+            accounts={this.state.accounts}
           />
         )
       }
@@ -2532,9 +2530,9 @@ export class App extends React.Component<IAppProps, IAppState> {
             pullRequest={popup.pullRequest}
             comment={popup.comment}
             emoji={this.state.emoji}
-            accounts={this.state.accounts}
             onSubmit={onPopupDismissedFn}
             onDismissed={onPopupDismissedFn}
+            accounts={this.state.accounts}
           />
         )
       }
@@ -2624,10 +2622,10 @@ export class App extends React.Component<IAppProps, IAppState> {
     this.props.dispatcher.refreshApiRepositories(account)
   }
 
-  private onShowAdvancedPreferences = () => {
+  private onShowIntegrationsPreferences = () => {
     this.props.dispatcher.showPopup({
       type: PopupType.Preferences,
-      initialSelectedTab: PreferencesTab.Advanced,
+      initialSelectedTab: PreferencesTab.Integrations,
     })
   }
 
@@ -2706,6 +2704,7 @@ export class App extends React.Component<IAppProps, IAppState> {
             commit={commit}
             selectedCommits={selectedCommits}
             emoji={emoji}
+            accounts={this.state.accounts}
           />
         )
       default:
@@ -3289,6 +3288,7 @@ export class App extends React.Component<IAppProps, IAppState> {
           imageDiffType={state.imageDiffType}
           hideWhitespaceInChangesDiff={state.hideWhitespaceInChangesDiff}
           hideWhitespaceInHistoryDiff={state.hideWhitespaceInHistoryDiff}
+          showDiffCheckMarks={state.showDiffCheckMarks}
           showSideBySideDiff={state.showSideBySideDiff}
           focusCommitMessage={state.focusCommitMessage}
           askForConfirmationOnDiscardChanges={
@@ -3339,7 +3339,6 @@ export class App extends React.Component<IAppProps, IAppState> {
     return (
       <Welcome
         dispatcher={this.props.dispatcher}
-        optOut={this.state.optOutOfUsageTracking}
         accounts={this.state.accounts}
         signInState={this.state.signInState}
       />
